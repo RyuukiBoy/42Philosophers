@@ -1,32 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utlis.c                                      :+:      :+:    :+:   */
+/*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oait-bad <oait-bad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/16 14:54:45 by marvin            #+#    #+#             */
-/*   Updated: 2023/06/16 14:54:45 by marvin           ###   ########.fr       */
+/*   Created: 2023/06/22 21:09:06 by oait-bad          #+#    #+#             */
+/*   Updated: 2023/06/22 21:09:06 by oait-bad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-size_t	get_time(size_t start)
+size_t	get_time(void)
 {
 	struct timeval	time;
-	size_t			now;
 
 	gettimeofday(&time, NULL);
-	now = (time.tv_sec * 1000) + (time.tv_usec / 1000) - start;
-	return (now);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
 void	ft_usleep(size_t time)
 {
 	size_t	start;
 
-	start = get_time(0);
-	while (get_time(start) < time)
+	start = get_time();
+	while (get_time() - start < time)
 		usleep(100);
+}
+
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+void	printer(t_philo *philo, char *str)
+{
+	pthread_mutex_lock(philo->print);
+	printf("%ldms philo %d %s\n", get_time() - philo->start_time, philo->id, str);
+	pthread_mutex_unlock(philo->print);
 }
