@@ -17,10 +17,13 @@ void	init_args(t_args *args, char **argv)
 	args->nb_philo = ft_atoi(argv[1]);
 	args->time_to_die = ft_atoi(argv[2]);
 	args->time_to_eat = ft_atoi(argv[3]);
+	// printf("HERE = %d\n",ft_atoi(argv[4]));
 	args->time_to_sleep = ft_atoi(argv[4]);
+	// exit(0);
 	args->nb_eat_max = -1;
-	if (argv[5])
-		args->nb_eat_max = ft_atoi(argv[5]);
+	// if (args == 6)
+	// 	args->nb_eat_max = ft_atoi(argv[5]);
+	pthread_mutex_init(&args->print, NULL);
 }
 
 void	init_mutex(t_philo *philo)
@@ -48,7 +51,6 @@ void	init_philo(t_philo *philo, t_args *args)
 		philo[i].forks = forks;
 		philo[i].args = args;
 		philo[i].id = i + 1;
-		//philo[i].last_eat = get_time();
 		philo[i].start_time = get_time();
 		philo[i].nb_eat = 0;
 		i++;

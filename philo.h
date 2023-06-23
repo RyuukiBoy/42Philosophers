@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oait-bad <oait-bad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 11:30:32 by oait-bad          #+#    #+#             */
-/*   Updated: 2023/06/22 21:03:19 by oait-bad         ###   ########.fr       */
+/*   Updated: 2023/06/23 01:34:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_args
 	int						nb_philo;
 	size_t					time_to_die;
 	size_t					time_to_eat;
+	pthread_mutex_t			print;
 	size_t					time_to_sleep;
 	int						nb_eat_max;
 }					t_args;
@@ -39,7 +40,6 @@ typedef struct s_philo
 	pthread_t				thread;
 	pthread_t				death;
 	pthread_mutex_t			*forks;
-	pthread_mutex_t			*print;
 }					t_philo;
 
 int		ft_atoi(const char *str);
@@ -49,7 +49,7 @@ size_t	get_time(void);
 void	start_threads(t_philo *philo);
 void	ft_usleep(size_t time);
 void	*check_death(void *arg);
-void	printer(t_philo *philo, char *str);
+void	printer(t_philo *philo, char *str, int flag);
 int		ft_isdigit(int c);
 
 #endif

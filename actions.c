@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oait-bad <oait-bad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 21:08:10 by oait-bad          #+#    #+#             */
-/*   Updated: 2023/06/22 21:08:11 by oait-bad         ###   ########.fr       */
+/*   Updated: 2023/06/23 01:48:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 void	eating(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->forks[philo->id - 1]);
-	printer(philo, "has taken left fork");
+	printer(philo, "has taken left fork\n", 1);
 	pthread_mutex_lock(&philo->forks[philo->id % philo->args->nb_philo]);
-	printer(philo, "has taken right fork");
-	printer(philo, "is eating");
+	printer(philo, "has taken right fork\n", 1);
+	printer(philo, "is eating\n", 1);
 	philo->last_eat = get_time();
 	ft_usleep(philo->args->time_to_eat);
 	philo->nb_eat++;
@@ -29,13 +29,14 @@ void	eating(t_philo *philo)
 
 void	sleeping(t_philo *philo)
 {
-	printer(philo, "is sleeping");
+	printer(philo, "is sleeping\n", 1);
+	// ft_usleep(100);
 	ft_usleep(philo->args->time_to_sleep);
 }
 
 void	thinking(t_philo *philo)
 {
-	printer(philo, "is thinking");
+	printer(philo, "is thinking\n", 1);
 }
 
 void	*philo_life(void *arg)
@@ -63,7 +64,7 @@ void	start_threads(t_philo *philo)
 	{
 		pthread_create(&philo[i].thread, NULL, philo_life, &philo[i]);
 		pthread_detach(philo[i].thread);
-		ft_usleep(100);
+		usleep(10);
 		i++;
 	}
 }

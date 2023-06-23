@@ -34,9 +34,10 @@ int	ft_isdigit(int c)
 	return (c >= '0' && c <= '9');
 }
 
-void	printer(t_philo *philo, char *str)
+void	printer(t_philo *philo, char *str, int dead)
 {
-	pthread_mutex_lock(philo->print);
-	printf("%ldms philo %d %s\n", get_time() - philo->start_time, philo->id, str);
-	pthread_mutex_unlock(philo->print);
+	pthread_mutex_lock(&philo->args->print);
+	printf("%ld ms philo %d %s", get_time() - philo->start_time, philo->id, str);
+	if (dead)
+		pthread_mutex_unlock(&philo->args->print);
 }
