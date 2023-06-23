@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oait-bad <oait-bad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 11:30:32 by oait-bad          #+#    #+#             */
-/*   Updated: 2023/06/23 01:34:15 by marvin           ###   ########.fr       */
+/*   Updated: 2023/06/23 13:11:46 by oait-bad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ typedef struct s_philo
 	t_args					*args;
 	int						id;
 	int						nb_eat;
-	size_t						last_eat;
+	size_t					last_eat;
 	size_t					start_time;
 	pthread_t				thread;
 	pthread_t				death;
+	pthread_mutex_t			last_eat_mutex;
 	pthread_mutex_t			*forks;
 }					t_philo;
 
@@ -48,8 +49,9 @@ void	init_all(t_philo *philo, t_args *args, char **argv);
 size_t	get_time(void);
 void	start_threads(t_philo *philo);
 void	ft_usleep(size_t time);
-void	*check_death(void *arg);
-void	printer(t_philo *philo, char *str, int flag);
+int		check_death(void *arg);
+void	printer(t_philo *philo, char *str);
+int		check_eat(t_philo *philo);
 int		ft_isdigit(int c);
 
 #endif

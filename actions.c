@@ -3,24 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: oait-bad <oait-bad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 21:08:10 by oait-bad          #+#    #+#             */
-/*   Updated: 2023/06/23 01:48:40 by marvin           ###   ########.fr       */
+/*   Updated: 2023/06/23 18:49:56 by oait-bad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "philo.h"
 
 void	eating(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->forks[philo->id - 1]);
-	printer(philo, "has taken left fork\n", 1);
+	printer(philo, "has taken left fork\n");
 	pthread_mutex_lock(&philo->forks[philo->id % philo->args->nb_philo]);
-	printer(philo, "has taken right fork\n", 1);
-	printer(philo, "is eating\n", 1);
+	printer(philo, "has taken right fork\n");
+	printer(philo, "is eating\n");
+	pthread_mutex_lock(&philo->last_eat_mutex);
 	philo->last_eat = get_time();
+	pthread_mutex_unlock(&philo->last_eat_mutex);
 	ft_usleep(philo->args->time_to_eat);
 	philo->nb_eat++;
 	pthread_mutex_unlock(&philo->forks[philo->id - 1]);
@@ -29,14 +30,13 @@ void	eating(t_philo *philo)
 
 void	sleeping(t_philo *philo)
 {
-	printer(philo, "is sleeping\n", 1);
-	// ft_usleep(100);
+	printer(philo, "is sleeping\n");
 	ft_usleep(philo->args->time_to_sleep);
 }
 
 void	thinking(t_philo *philo)
 {
-	printer(philo, "is thinking\n", 1);
+	printer(philo, "is thinking\n");
 }
 
 void	*philo_life(void *arg)
@@ -49,7 +49,7 @@ void	*philo_life(void *arg)
 		eating(philo);
 		sleeping(philo);
 		thinking(philo);
-		if (philo->args->nb_eat_max == philo->nb_eat)
+		if (check_eat(philo))
 			break ;
 	}
 	return (NULL);
@@ -63,8 +63,7 @@ void	start_threads(t_philo *philo)
 	while (i < philo->args->nb_philo)
 	{
 		pthread_create(&philo[i].thread, NULL, philo_life, &philo[i]);
-		pthread_detach(philo[i].thread);
-		usleep(10);
+		usleep(50);
 		i++;
 	}
 }
@@ -82,6 +81,7 @@ int		main(int ac, char **av)
 	start_threads(philo);
 	while (1)
 	{
-		check_death(philo);
+		if (check_death(philo))
+			break ;
 	}
 }
