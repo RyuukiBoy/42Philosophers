@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 size_t	get_time(void)
 {
@@ -37,13 +37,14 @@ int	ft_isdigit(int c)
 void	printer(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->args->print);
-	printf("%ld ms philo %d %s", get_time() - philo->start_time, philo->id, str);
+	printf("%ld ms philo %d %s", get_time() - philo->start_time,
+		philo->id, str);
 	pthread_mutex_unlock(&philo->args->print);
 }
 
 int	check_eat(t_philo *philo)
 {
-	if (philo->args->nb_eat_max == -1)
+	if (philo->args->nb_eat_max == 0)
 		return (0);
 	if (philo->nb_eat == philo->args->nb_eat_max)
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: oait-bad <oait-bad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 11:30:32 by oait-bad          #+#    #+#             */
-/*   Updated: 2023/06/23 13:11:46 by oait-bad         ###   ########.fr       */
+/*   Updated: 2023/06/26 21:13:25 by oait-bad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <string.h>
+# include <semaphore.h>
 
 typedef struct s_args
 {
@@ -40,6 +41,7 @@ typedef struct s_philo
 	pthread_t				thread;
 	pthread_t				death;
 	pthread_mutex_t			last_eat_mutex;
+	pthread_mutex_t			eat;
 	pthread_mutex_t			*forks;
 }					t_philo;
 
@@ -53,5 +55,6 @@ int		check_death(void *arg);
 void	printer(t_philo *philo, char *str);
 int		check_eat(t_philo *philo);
 int		ft_isdigit(int c);
+int		check_num_args(char **argv);
 
 #endif

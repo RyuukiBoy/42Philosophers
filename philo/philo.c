@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_death.c                                      :+:      :+:    :+:   */
+/*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oait-bad <oait-bad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/22 21:08:23 by oait-bad          #+#    #+#             */
-/*   Updated: 2023/06/23 18:52:53 by oait-bad         ###   ########.fr       */
+/*   Created: 2023/06/22 21:09:13 by oait-bad          #+#    #+#             */
+/*   Updated: 2023/06/26 20:53:03 by oait-bad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
-int	check_death(void *arg)
+int	main(int argc, char **argv)
 {
-	t_philo	*philo;
+	t_philo		*philo;
+	t_args		*args;
 
-	philo = (t_philo *)arg;
+	if (argc < 5 || argc > 6)
+		return (printf("Error: bad arguments\n"));
+	if (check_num_args(argv))
+		return (printf("Error: bad arguments\n"));
+	philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
+	args = malloc(sizeof(t_args));
+	init_all(philo, args, argv);
+	start_threads(philo);
 	while (1)
 	{
-		if (philo->nb_eat >= philo->args->nb_eat_max)
-			return (1);
-		pthread_mutex_lock(&philo->last_eat_mutex);
-		if (get_time() - philo->last_eat > philo->args->time_to_die)
-		{
-			printer(philo, "is dead\n");
-			return (1);
-		}
-		pthread_mutex_unlock(&philo->last_eat_mutex);
+		if (check_death(philo))
+			break ;
 	}
-	return (0);
 }

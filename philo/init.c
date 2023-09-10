@@ -10,7 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
+
+int	check_num_args(char **argv)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (argv[i])
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (argv[i][0] == '-')
+				return (1);
+			if (!ft_isdigit(argv[i][j]))
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
 
 void	init_args(t_args *args, char **argv)
 {
@@ -21,7 +43,7 @@ void	init_args(t_args *args, char **argv)
 	if (argv[5])
 		args->nb_eat_max = ft_atoi(argv[5]);
 	else
-		args->nb_eat_max = -1;
+		args->nb_eat_max = 0;
 	pthread_mutex_init(&args->print, NULL);
 }
 
@@ -39,19 +61,21 @@ void	init_mutex(t_philo *philo)
 
 void	init_philo(t_philo *philo, t_args *args)
 {
-	int	i;
+	int						i;
 	pthread_mutex_t			*forks;
 
 	forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) \
 			* args->nb_philo);
 	i = 0;
 	pthread_mutex_init(&philo->last_eat_mutex, NULL);
+	pthread_mutex_init(&philo->eat, NULL);
 	while (i < args->nb_philo)
 	{
 		philo[i].forks = forks;
 		philo[i].args = args;
 		philo[i].id = i + 1;
 		philo[i].start_time = get_time();
+		philo[i].last_eat = get_time();
 		philo[i].nb_eat = 0;
 		i++;
 	}
